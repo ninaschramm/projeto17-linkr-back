@@ -2,6 +2,8 @@ import express, {json} from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 
+import router from './src/routes/index.js';
+
 const server = express();
 
 dotenv.config();
@@ -12,6 +14,7 @@ server.use(
   }),
   express.json(), cors()
 );
+server.use(router);
 
 server.use(function (req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -20,8 +23,4 @@ server.use(function (req, res, next) {
   next();
 });
 
-const PORT = process.env.PORT || 5000
-
-server.listen(PORT, () => {
-    console.log(`Server is listening on ${PORT}`);
-  });
+export default server;
