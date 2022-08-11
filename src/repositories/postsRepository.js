@@ -11,7 +11,8 @@ async function createPost(link, text, id) {
 
 async function getAllPosts() {
   return db.query(`
-    SELECT posts.id as id, users.username, users.picture as "userPicture", posts.text, posts.link,
+    SELECT posts.id as id, posts."userId", users.username, users.picture as "userPicture", 
+    posts.text, posts.link,
     COALESCE(COUNT(likes.id),0) AS "likes"
     FROM posts
     JOIN users ON posts."userId" = users.id

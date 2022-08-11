@@ -1,4 +1,5 @@
 import postsRepository from "./../repositories/postsRepository.js";
+import  urlMetadata  from 'url-metadata'
 
 export async function createPost(req, res) {
   // const { id } = res.locals.user;
@@ -20,11 +21,27 @@ export async function createPost(req, res) {
 export async function getAllPosts(req, res) {
   
   try {
-    const {rows: result} = await postsRepository.getAllPosts();
-    if(result.length === 0) {
+    const {rows: posts} = await postsRepository.getAllPosts();
+    if(posts.length === 0) {
       return res.sendStatus(404); // not found
     }
   
+    const result = await Promise.all(posts.map(async (post)=> {
+      
+      const newPost = await urlMetadata(post.link).then(
+        
+        function (metadata) { // success handler
+          
+          return {...post, postImage:metadata.image, postDescription:metadata.description}
+        },
+        function (error) { // failure handler
+          console.log(error)
+        }
+      )
+      return newPost;
+    }))
+
+    
     res.send(result).status(200);
   } catch (error) {
     console.log(error);
