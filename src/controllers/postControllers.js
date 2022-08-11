@@ -32,7 +32,7 @@ export async function getAllPosts(req, res) {
         
         function (metadata) { // success handler
           
-          return {...post, postImage:metadata.image, postDescription:metadata.description}
+          return {...post, postImage:metadata.image, postDescription:metadata.description, postTitle:metadata.title}
         },
         function (error) { // failure handler
           console.log(error)
