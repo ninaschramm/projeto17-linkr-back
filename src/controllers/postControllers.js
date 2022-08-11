@@ -1,5 +1,6 @@
 import postsRepository from "./../repositories/postsRepository.js";
 import  urlMetadata  from 'url-metadata'
+import hashtagRepository from "../repositories/hashtagRepository.js";
 
 export async function createPost(req, res) {
   // const { id } = res.locals.user;
@@ -9,8 +10,16 @@ export async function createPost(req, res) {
 
   const id = 1;
 
+  let textArr = text.split(" ")  
+
+
   try {
     await postsRepository.createPost(link, text, id);
+    for (let str of textArr) {
+      if (str[0] === '#') {
+        await hashtagRepository.addHashtag(str.slice(1));
+      }
+    }
     res.sendStatus(201); // created
   } catch (error) {
     console.log(error);
@@ -32,7 +41,7 @@ export async function getAllPosts(req, res) {
         
         function (metadata) { // success handler
           
-          return {...post, postImage:metadata.image, postDescription:metadata.description}
+          return {...post, postImage:metadata.image, postDescription:metadata.description, postTitle:metadata.title}
         },
         function (error) { // failure handler
           console.log(error)
