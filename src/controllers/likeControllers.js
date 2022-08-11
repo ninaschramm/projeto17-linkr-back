@@ -1,21 +1,12 @@
-import db from "../config/db.js";
+import likesRepository from "../repositories/likesRepository.js";
 
 export async function getLike(req, res){
     const { id } = req.params;
-    
+
     try {
         
-        const somaLikes = await db.query(`
-            SELECT COUNT(likes."postId") FROM LIKES
-            WHERE likes."postId" = $1
-        `, [id]);
-
-        const likesUsers = await db.query(`
-            SELECT users.username 
-            FROM users
-            JOIN likes ON users.id = likes."userId"
-            WHERE likes."postId" = $1;
-        `, [id]);
+        const somaLikes = await likesRepository.getLikesCountByPostId(id);
+        const likesUsers = await likesRepository.getLikesNamesFromPostId(id);
         const likesUserslist = likesUsers.rows;
 
         res.send({
@@ -31,12 +22,10 @@ export async function getLike(req, res){
 
 export async function postLike(req, res){
     const { id } = req.params;
+    const { userId } = req.locals; 
     try {
         
-        await db.query(`
-            INSERT INTO likes ("postId","userId")
-            VALUES ($1, $2)
-        `, [id, 1]);
+        await likesRepository.addLike(id, userId);
         res.sendStatus(201);
 
     } catch (error) {
@@ -47,12 +36,12 @@ export async function postLike(req, res){
 
 export async function deleteLike(req, res){
     const { id } = req.params;
+    const { userId } = req.locals;
+    
     try {
         
-        await db.query(`
-            DELETE FROM likes
-            WHERE "postId" = $1 AND "userId" = $2
-        `, [id], 1);
+        await likesRepository.deleteLike(id, userId);
+
         res.sendStatus(201);
 
     } catch (error) {
