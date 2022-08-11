@@ -19,6 +19,7 @@ async function getAllPosts() {
     LEFT JOIN likes ON likes."postId" = posts.id
     GROUP BY posts.id, users.id
     ORDER BY posts.id DESC
+    LIMIT 20
     `
     );
 }
