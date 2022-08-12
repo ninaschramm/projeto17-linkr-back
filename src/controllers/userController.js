@@ -5,9 +5,13 @@ export async function createUser(req, res){
     const {email, username, password, picture} = user;
 
     try{
-        const alreadyExist = userRepository.checkEmail(email);
-        if(alreadyExist.rowCount>0){
+        const emailExist = await userRepository.checkEmail(email);
+        const userExist = await userRepository.checkUsername(username);
+        if(emailExist.rowCount>0){
             return res.status(409).send("O email inserido já está cadastrado");
+        }
+        else if(userExist.rowCount>0){
+            return res.status(409).send("O nome de usuário inserido já está cadastrado");
         }
         await userRepository.createUser(email, username, password, picture);
         return res.sendStatus(201);

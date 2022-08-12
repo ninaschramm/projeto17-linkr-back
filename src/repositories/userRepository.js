@@ -5,6 +5,10 @@ async function checkEmail(email){
     return db.query(`SELECT * FROM users WHERE email = $1`, [email]);
 }
 
+async function checkUsername(email){
+    return db.query(`SELECT * FROM users WHERE username = $1`, [email]);
+}
+
 async function createUser(email, username, password, picture){
     const KEY = Number(process.env.KEY);
     const crypted = bcrypt.hashSync(password, KEY);
@@ -17,7 +21,8 @@ async function createUser(email, username, password, picture){
 
 const userRepository = {
     checkEmail,
-    createUser
+    createUser,
+    checkUsername
 };
 
 export default userRepository;
