@@ -11,7 +11,7 @@ async function addLike(id, userId){
     return db.query(`
     INSERT INTO likes ("postId","userId")
     VALUES ($1, $2)
-`, [id,userId]);
+`, [id, userId]);
 }
 
 async function getLikesNamesByPostId(id){
@@ -29,12 +29,20 @@ async function getLikesCountByPostId(id){
     WHERE likes."postId" = $1
 `, [id]);
 }
+async function getLikesByPostIdAndUserId(id, userId){
+    return db.query(`
+        SELECT * 
+        FROM likes 
+        WHERE likes."postId" = $1 AND "userId" = $2
+    `, [id, userId]);
 
+}
 const likesRepository = {
     deleteLike,
     addLike,
     getLikesNamesByPostId,
-    getLikesCountByPostId
+    getLikesCountByPostId,
+    getLikesByPostIdAndUserId
 }
 
 export default likesRepository;
