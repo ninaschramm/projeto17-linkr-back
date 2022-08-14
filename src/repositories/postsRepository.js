@@ -24,9 +24,16 @@ async function getAllPosts() {
     );
 }
 
+async function deletePost(id) {
+  return db.query(`
+  DELETE FROM posts WHERE id=$1
+  `, [id])
+}
+
 const postsRepository = {
     createPost,
-    getAllPosts
+    getAllPosts,
+    deletePost
   };
   
   export default postsRepository;

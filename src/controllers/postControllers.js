@@ -9,8 +9,8 @@ export async function createPost(req, res) {
 
   const id = 1;
 
-  try {
-    await postsRepository.createPost(link, text, id);
+try {
+    await postsRepository.createPost(link, text, id);             
     res.sendStatus(201); // created
   } catch (error) {
     console.log(error);
@@ -48,4 +48,16 @@ export async function getAllPosts(req, res) {
     return res.sendStatus(500); // server error
   }
   
+}
+
+export async function deletePost(req, res) {
+  id = req.body.id
+  try {
+    await postsRepository.deletePost(id)
+    res.sendStatus(204);
+  }
+  catch (error) {
+    console.log(error);
+    return res.sendStatus(500); // server error
+}
 }
