@@ -51,7 +51,7 @@ export async function getAllPosts(req, res) {
 }
 
 export async function deletePost(req, res) {
-  id = req.body.id
+  const id = req.body.id
   try {
     await postsRepository.deletePost(id)
     res.sendStatus(204);
