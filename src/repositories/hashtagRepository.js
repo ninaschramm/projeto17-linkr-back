@@ -10,8 +10,13 @@ async function getTrendingHashtags() {
     LIMIT 10`)
 }
 
+async function getHashtag(hashtag) {
+    return db.query(`SELECT * FROM hashtags WHERE hashtag=$1`, [hashtag]);
+}
+
 const hashtagRepository = {
-    getTrendingHashtags
+    getTrendingHashtags,
+    getHashtag
 }
 
 export default hashtagRepository
