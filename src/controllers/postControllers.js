@@ -1,17 +1,40 @@
 import postsRepository from "./../repositories/postsRepository.js";
 import  urlMetadata  from 'url-metadata'
+import db from "../config/db.js";
 import hashtagRepository from "../repositories/hashtagRepository.js";
 
 export async function createPost(req, res) {
   // const { id } = res.locals.user;
   const { link, text } = req.body;
+  let textArr = text.split(" ")
   
   // o id viria do jwt, como ele ainda não está implementado vou usar um const
 
   const id = 1;
 
+  async function insertHashtags(str, postId) {
+    if (str[0] === '#') {
+      const hashtag = str.toLowerCase().slice(1)
+      const {rows: hashtagId} = await postsRepository.insertHashtag(hashtag)
+      console.log(hashtagId[0].id)
+      await postsRepository.insertHashtagPost(postId, hashtagId[0].id)
+    }
+  }
+
+  async function verifyHashtag(str, postId) {
+    const {rows: verifyExistingHashtag} = await hashtagRepository.getHashtag(str.toLowerCase().slice(1))
+      if (verifyExistingHashtag.length === 0) {
+      insertHashtags(str, postId) }
+      else if (verifyExistingHashtag.length > 0) {
+        await postsRepository.insertHashtagPost(postId, verifyExistingHashtag[0].id);
+      }
+  }
+
 try {
-    await postsRepository.createPost(link, text, id);             
+    const {rows: postId} = await postsRepository.createPost(link, text, id);    
+    console.log(textArr)
+    console.log(postId[0].id) 
+    textArr.map((str) => { verifyHashtag(str, postId[0].id) })
     res.sendStatus(201); // created
   } catch (error) {
     console.log(error);
@@ -52,8 +75,13 @@ export async function getAllPosts(req, res) {
 }
 
 export async function deletePost(req, res) {
-  id = req.body.id
+  const id = req.body.id
   try {
+    const { rows: verifyPost } = await postsRepository.getPost(id)
+    console.log(verifyPost)
+    if (verifyPost.length === 0) {
+      return res.sendStatus(404);
+    }
     await postsRepository.deletePost(id)
     res.sendStatus(204);
   }

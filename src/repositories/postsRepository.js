@@ -4,6 +4,7 @@ async function createPost(link, text, id) {
   return db.query(`
     INSERT INTO posts(link, text, "userId")
     VALUES ($1, $2, $3)
+    RETURNING id    
   `, [link, text, id])
 
   
@@ -24,16 +25,39 @@ async function getAllPosts() {
     );
 }
 
+async function getPost(id) {
+  return db.query(`
+  SELECT * FROM posts WHERE posts.id=$1
+  `, [id])
+}
+
 async function deletePost(id) {
   return db.query(`
-  DELETE FROM posts WHERE id=$1
+  DELETE FROM posts WHERE posts.id=$1
   `, [id])
+}
+
+async function insertHashtag(hashtag) {
+  return db.query(`
+  INSERT INTO hashtags (hashtag) 
+  VALUES ($1) 
+  RETURNING id`, [hashtag])
+}
+
+async function insertHashtagPost(postId, hashtagId){
+  return db.query(`
+  INSERT INTO hashtags_posts ("postId", "hashtagId") 
+  VALUES ($1, $2)`,
+  [postId, hashtagId])
 }
 
 const postsRepository = {
     createPost,
     getAllPosts,
-    deletePost
+    deletePost,
+    insertHashtag,
+    insertHashtagPost,
+    getPost
   };
   
   export default postsRepository;

@@ -28,8 +28,14 @@ async function getPostsByHashtag(hashtag) {
       );
 }
 
+async function getHashtag(hashtag) {
+    return db.query(`SELECT * FROM hashtags WHERE hashtag=$1`, [hashtag]);
+}
+
 const hashtagRepository = {
-    getTrendingHashtags, getPostsByHashtag
+    getTrendingHashtags,
+    getHashtag,
+    getPostsByHashtag
 }
 
 export default hashtagRepository
