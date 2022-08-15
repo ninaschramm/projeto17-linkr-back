@@ -8,8 +8,8 @@ import { getPostsByUser } from "../controllers/userController.js";
 
 const urlsRouter = Router();
 
-urlsRouter.post("/posts", validateSchema(postSchema), createPost);
-urlsRouter.get('/posts', getAllPosts);
+urlsRouter.post("/posts", validateToken, validateSchema(postSchema), createPost);
+urlsRouter.get('/posts', validateToken, getAllPosts);
 urlsRouter.delete('/posts', deletePost);
 urlsRouter.get('/user/:id', getPostsByUser)
 

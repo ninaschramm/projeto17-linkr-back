@@ -7,27 +7,21 @@ export async function validateToken (req, res, next){
     const token = authorization?.replace('Bearer ', '');
 
     if(token === null){
+        console.log("oeeei")
         return res.sendStatus(401);
     } 
 
-    const { userId } = jwt.verify(token, SECRET, (err) => {
+    
+    jwt.verify(token, SECRET, (err, data) => {
         
         if(err){
+            console.log("oi")
             return res.sendStatus(401);
-        } 
+        }
+        else{
+        res.locals.user = data.id;
+        next();
+        }
+        
     });
-
-    /* 
-    
-    seria bom verificar se o id existe no banco
-
-    const user = await findUserById(id);
-
-    if (user.rowCount === 0) {
-        return res.sendStatus(401);;
-    }
-    */
-    console.log(userId);
-    res.locals.user = userId;
-    next();
 };
