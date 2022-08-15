@@ -28,15 +28,8 @@ async function getPostsByHashtag(hashtag) {
       );
 }
 
-async function addHashtag() {
-    return db.query(`
-        INSERT INTO hashtags(hashtag)
-        VALUES ($1)
-    `)
-}
-
 const hashtagRepository = {
-    getTrendingHashtags, getPostsByHashtag, addHashtag
+    getTrendingHashtags, getPostsByHashtag
 }
 
 export default hashtagRepository

@@ -10,18 +10,12 @@ export async function createPost(req, res) {
 
   const id = 1;
 
-  let textArr = text.split(" ")  
-
-
+  
   try {
     await postsRepository.createPost(link, text, id);
-    for (let str of textArr) {
-      if (str[0] === '#') {
-        await hashtagRepository.addHashtag(str.slice(1));
-      }
-    }
-    res.sendStatus(201); // created
-  } catch (error) {
+    res.sendStatus(201); // created    
+  } 
+  catch (error) {
     console.log(error);
     return res.sendStatus(500); // server error
   }
