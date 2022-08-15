@@ -31,9 +31,17 @@ async function getPost(id) {
   `, [id])
 }
 
+async function deleteConstraint(id) {
+  return db.query(`
+  DELETE FROM hashtags_posts
+  WHERE "postId" = $1;
+  `, [id])
+}
+
 async function deletePost(id) {
   return db.query(`
-  DELETE FROM posts WHERE posts.id=$1
+  DELETE FROM posts
+  WHERE id=$1;
   `, [id])
 }
 
@@ -55,9 +63,10 @@ const postsRepository = {
     createPost,
     getAllPosts,
     deletePost,
+    getPost,
+    deleteConstraint
     insertHashtag,
-    insertHashtagPost,
-    getPost
+    insertHashtagPost   
   };
   
   export default postsRepository;

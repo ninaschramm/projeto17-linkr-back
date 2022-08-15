@@ -77,6 +77,7 @@ export async function deletePost(req, res) {
     if (verifyPost.length === 0) {
       return res.sendStatus(404);
     }
+    await postsRepository.deleteConstraint(id)
     await postsRepository.deletePost(id)
     res.sendStatus(204);
   }
