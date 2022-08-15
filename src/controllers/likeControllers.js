@@ -16,7 +16,7 @@ export async function getLike(req, res){
         res.send({
             likesTotal: parseInt(numberLikes.count) || 0,
             usernames: likesNamelist
-        });
+        }).status(200);
 
     } catch (error) {
         console.log(error);
@@ -26,11 +26,11 @@ export async function getLike(req, res){
 
 export async function postLike(req, res){
     const { id } = req.params;
-//    const { userId } = req.locals; 
+    const { id: userId } = req.locals.user; 
     try {
         
-        const checaLikes = await likesRepository.getLikesByPostIdAndUserId(id, 1); 
-        
+        const checaLikes = await likesRepository.getLikesByPostIdAndUserId(id, userId); 
+        console.log(checaLikes);
         if(checaLikes.rowCount > 0){
             return res.sendStatus(401);
         }
@@ -46,11 +46,11 @@ export async function postLike(req, res){
 
 export async function deleteLike(req, res){
     const { id } = req.params;
-//    const { userId } = req.locals;
+   const { id: userId } = req.locals.user;
 
     try {
         
-        await likesRepository.deleteLike(id, 2);
+        await likesRepository.deleteLike(id, userId);
 
         res.sendStatus(201);
 

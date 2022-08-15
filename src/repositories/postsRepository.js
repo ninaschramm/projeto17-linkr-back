@@ -64,7 +64,7 @@ const postsRepository = {
     getAllPosts,
     deletePost,
     getPost,
-    deleteConstraint
+    deleteConstraint,
     insertHashtag,
     insertHashtagPost   
   };

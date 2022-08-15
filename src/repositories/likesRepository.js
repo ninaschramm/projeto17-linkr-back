@@ -19,7 +19,7 @@ async function getLikesNamesByPostId(id){
     SELECT users.username 
     FROM users
     JOIN likes ON users.id = likes."userId"
-    WHERE likes."postId" = $1;
+    WHERE likes."postId" = $1
 `, [id]);
 }
 
@@ -33,7 +33,7 @@ async function getLikesByPostIdAndUserId(id, userId){
     return db.query(`
         SELECT * 
         FROM likes 
-        WHERE likes."postId" = $1 AND "userId" = $2
+        WHERE likes."postId" = $1 AND likes."userId" = $2;
     `, [id, userId]);
 
 }
