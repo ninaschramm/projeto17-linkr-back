@@ -10,7 +10,7 @@ export async function validateToken (req, res, next){
         return res.sendStatus(401);
     } 
 
-    const { id } = jwt.verify(token, SECRET, (err) => {
+    const { userId } = jwt.verify(token, SECRET, (err) => {
         
         if(err){
             return res.sendStatus(401);
@@ -27,7 +27,7 @@ export async function validateToken (req, res, next){
         return res.sendStatus(401);;
     }
     */
-
-    res.locals.user = id;
+    console.log(userId);
+    res.locals.user = userId;
     next();
 };
