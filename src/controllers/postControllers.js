@@ -4,14 +4,10 @@ import db from "../config/db.js";
 import hashtagRepository from "../repositories/hashtagRepository.js";
 
 export async function createPost(req, res) {
-  // const { id } = res.locals.user;
+  const  id  = res.locals.user;
   const { link, text } = req.body;
   let textArr = text.split(" ")
   
-  // o id viria do jwt, como ele ainda não está implementado vou usar um const
-
-  const id = 1;
-
   async function insertHashtags(str, postId) {
     if (str[0] === '#') {
       const hashtag = str.toLowerCase().slice(1)
@@ -59,7 +55,6 @@ export async function getAllPosts(req, res) {
           return {...post, postImage:metadata.image, postDescription:metadata.description, postTitle:metadata.title}
         },
         function (error) { // failure handler
-          console.log(error)
         }
       )
       return newPost;

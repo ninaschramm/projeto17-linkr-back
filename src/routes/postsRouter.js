@@ -7,8 +7,8 @@ import {createPost, deletePost, getAllPosts} from "./../controllers/postControll
 
 const urlsRouter = Router();
 
-urlsRouter.post("/posts", validateSchema(postSchema), createPost);
-urlsRouter.get('/posts', getAllPosts);
+urlsRouter.post("/posts", validateToken, validateSchema(postSchema), createPost);
+urlsRouter.get('/posts', validateToken, getAllPosts);
 urlsRouter.delete('/posts', deletePost);
 
 export default urlsRouter;
