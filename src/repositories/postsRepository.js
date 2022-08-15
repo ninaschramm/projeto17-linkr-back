@@ -24,16 +24,23 @@ async function getAllPosts() {
     );
 }
 
+async function getPost(id) {
+  return db.query(`
+  SELECT * FROM posts WHERE posts.id=$1
+  `, [id])
+}
+
 async function deletePost(id) {
   return db.query(`
-  DELETE FROM posts WHERE id=$1
+  DELETE FROM posts WHERE posts.id=$1
   `, [id])
 }
 
 const postsRepository = {
     createPost,
     getAllPosts,
-    deletePost
+    deletePost,
+    getPost
   };
   
   export default postsRepository;
