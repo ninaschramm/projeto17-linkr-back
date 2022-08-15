@@ -19,13 +19,21 @@ async function getAllPosts() {
     LEFT JOIN likes ON likes."postId" = posts.id
     GROUP BY posts.id, users.id
     ORDER BY posts.id DESC
+    LIMIT 20
     `
     );
 }
 
+async function deletePost(id) {
+  return db.query(`
+  DELETE FROM posts WHERE id=$1
+  `, [id])
+}
+
 const postsRepository = {
     createPost,
-    getAllPosts
+    getAllPosts,
+    deletePost
   };
   
   export default postsRepository;
