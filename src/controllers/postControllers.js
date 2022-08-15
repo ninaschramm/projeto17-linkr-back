@@ -51,8 +51,13 @@ export async function getAllPosts(req, res) {
 }
 
 export async function deletePost(req, res) {
-  id = req.body.id
+  const id = req.body.id
   try {
+    const { rows: verifyPost } = await postsRepository.getPost(id)
+    console.log(verifyPost)
+    if (verifyPost.length === 0) {
+      return res.sendStatus(404);
+    }
     await postsRepository.deletePost(id)
     res.sendStatus(204);
   }
