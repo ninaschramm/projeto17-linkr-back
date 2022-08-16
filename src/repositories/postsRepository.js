@@ -27,8 +27,17 @@ async function getAllPosts() {
 
 async function getPost(id) {
   return db.query(`
-  SELECT * FROM posts WHERE posts.id=$1
+  SELECT * FROM posts 
+  WHERE posts.id=$1
   `, [id])
+}
+
+async function confirmUser(postId, userId) {
+  return db.query(`
+  SELECT * FROM posts 
+  WHERE posts.id=$1
+  AND posts."userId"=$2
+  `, [postId, userId])
 }
 
 async function deleteConstraint(id) {
@@ -66,7 +75,8 @@ const postsRepository = {
     getPost,
     deleteConstraint,
     insertHashtag,
-    insertHashtagPost   
+    insertHashtagPost,
+    confirmUser   
   };
   
   export default postsRepository;
