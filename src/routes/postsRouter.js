@@ -11,6 +11,6 @@ const urlsRouter = Router();
 urlsRouter.post("/posts", validateToken, validateSchema(postSchema), createPost);
 urlsRouter.get('/posts', validateToken, getAllPosts);
 urlsRouter.delete('/posts', validateToken, deletePost);
-urlsRouter.get('/user/:id', validateToken, getPostsByUser)
+urlsRouter.get('/user/:id', validateToken, getPostsByUser);
 
 export default urlsRouter;

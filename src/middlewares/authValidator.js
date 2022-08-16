@@ -7,7 +7,6 @@ export async function validateToken (req, res, next){
     const token = authorization?.replace('Bearer ', '');
 
     if(token === null){
-        console.log("oeeei")
         return res.sendStatus(401);
     } 
 
@@ -15,7 +14,6 @@ export async function validateToken (req, res, next){
     jwt.verify(token, SECRET, (err, data) => {
         
         if(err){
-            console.log("oi")
             return res.sendStatus(401);
         }
         else{
