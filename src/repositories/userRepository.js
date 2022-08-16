@@ -37,11 +37,23 @@ async function getPostsByUser(user) {
       );
 }
 
+async function searchUsers(letters){
+    const param = letters + '%';
+    return db.query(
+        `SELECT id, username, picture 
+        FROM users 
+        WHERE username LIKE $1`,
+        [param]
+    );
+}
+
+
 const userRepository = {
     checkEmail,
     createUser,
     checkUsername,
-    getPostsByUser
+    getPostsByUser,
+    searchUsers
 };
 
 export default userRepository;

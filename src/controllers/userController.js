@@ -54,3 +54,20 @@ export async function getPostsByUser(req, res) {
         return res.sendStatus(500); // server error
       }
     }
+export async function searchUsers(req, res) {
+
+  try 
+  {
+    const {letters} = req.body;
+    const {rows: users} = await userRepository.searchUsers(letters);
+    if(users.length === 0) {
+      return res.sendStatus(404); // not found
+    }
+
+    res.send(users).status(200);  
+  }
+  catch (error){
+    console.log(error);
+    return res.sendStatus(500); // server error
+  }
+}
