@@ -70,15 +70,22 @@ export async function getAllPosts(req, res) {
 }
 
 export async function deletePost(req, res) {
-  const id = req.body.id
+  const postId = req.body.id
+  const userId = res.locals.user
   try {
-    const { rows: verifyPost } = await postsRepository.getPost(id)
+    const { rows: verifyPost } = await postsRepository.getPost(postId)
     console.log(verifyPost)
     if (verifyPost.length === 0) {
       return res.sendStatus(404);
     }
-    await postsRepository.deleteConstraint(id)
-    await postsRepository.deletePost(id)
+    else {
+      const { rows: confirmUser } = await postsRepository.confirmUser(postId, userId)
+      if (confirmUser.length === 0) {
+        return res.sendStatus(401);
+      }
+    }
+    await postsRepository.deleteConstraint(postId)
+    await postsRepository.deletePost(postId)
     res.sendStatus(204);
   }
   catch (error) {

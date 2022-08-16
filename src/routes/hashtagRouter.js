@@ -4,7 +4,7 @@ import { validateToken } from '../middlewares/authValidator.js';
 
 const hashtagRouter = Router();
 
-hashtagRouter.get('/hashtags', getTrendingHashtags) //incluir o validateToken depois
-hashtagRouter.get('/hashtags/:hashtag', getPostsByHashtag)
+hashtagRouter.get('/hashtags', validateToken, getTrendingHashtags) //incluir o validateToken depois
+hashtagRouter.get('/hashtags/:hashtag', validateToken, getPostsByHashtag)
 
 export default hashtagRouter
