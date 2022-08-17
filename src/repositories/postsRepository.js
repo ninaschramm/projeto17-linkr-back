@@ -68,6 +68,10 @@ async function insertHashtagPost(postId, hashtagId){
   [postId, hashtagId])
 }
 
+async function updatePost(postId, text){
+  return db.query(`UPDATE posts SET text = $1 WHERE id = $2`, [text, postId]);
+}
+
 const postsRepository = {
     createPost,
     getAllPosts,
@@ -76,7 +80,8 @@ const postsRepository = {
     deleteConstraint,
     insertHashtag,
     insertHashtagPost,
-    confirmUser   
+    confirmUser,
+    updatePost   
   };
   
   export default postsRepository;
