@@ -33,10 +33,10 @@ async function getLikesByPostIdAndUserId(id, userId){
     return db.query(`
         SELECT * 
         FROM likes 
-        WHERE likes."postId" = $1 AND likes."userId" = $2;
+        WHERE "postId" = $1 AND "userId" = $2;
     `, [id, userId]);
-
 }
+
 const likesRepository = {
     deleteLike,
     addLike,
