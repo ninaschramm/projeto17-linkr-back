@@ -9,7 +9,7 @@ export async function getLike(req, res){
         const { rows: somaLikes} = await likesRepository.getLikesCountByPostId(id);
         const [numberLikes] = somaLikes;
         
-        const { rows: likesUserslist } = await likesRepository.getLikesNamesByPostId(id);
+        const { rows: likesUserslist } = await likesRepository.getLikesNamesByPostId(id, userId);
         
         const checaLiked = await likesRepository.getLikesByPostIdAndUserId(id, userId);
         let liked;
