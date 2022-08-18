@@ -100,7 +100,8 @@ export async function checkFollows(req, res) {
   }
   catch(err) {
     console.log(err)
-    return res.sendStatus(500)
+    return res.sendStatus(500) }
+  }
 
 export async function searchUsers(req, res) {
 

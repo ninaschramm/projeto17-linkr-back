@@ -77,7 +77,7 @@ const userRepository = {
     getPostsByUser,
     followRequest,
     unfollow,
-    checkFollows
+    checkFollows,
     searchUsers
 };
 
