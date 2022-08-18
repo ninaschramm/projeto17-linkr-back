@@ -58,12 +58,11 @@ export async function searchUsers(req, res) {
 
   try 
   {
-    const {letters} = req.body;
+    const letters = req.params.letters;
     const {rows: users} = await userRepository.searchUsers(letters);
     if(users.length === 0) {
       return res.sendStatus(404); // not found
     }
-
     res.send(users).status(200);  
   }
   catch (error){

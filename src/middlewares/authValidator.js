@@ -12,7 +12,6 @@ export async function validateToken (req, res, next){
 
     
     jwt.verify(token, SECRET, (err, data) => {
-        
         if(err){
             return res.sendStatus(401);
         }
