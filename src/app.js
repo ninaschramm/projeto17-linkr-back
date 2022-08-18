@@ -14,7 +14,6 @@ server.use(
   }),
   express.json(), cors()
 );
-server.use(router);
 
 server.use(function (req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -22,5 +21,9 @@ server.use(function (req, res, next) {
   res.setHeader('Access-Control-Allow-Headers', '*');
   next();
 });
+
+server.use(router);
+
+
 
 export default server;

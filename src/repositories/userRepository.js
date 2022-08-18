@@ -37,6 +37,28 @@ async function getPostsByUser(user) {
       );
 }
 
+async function followRequest(followerId, followedId) {
+    return db.query(
+        `INSERT INTO follows ("followerId", "followedId") VALUES ($1, $2)`,
+        [followerId, followedId]
+    );
+}
+
+async function unfollow(followerId, followedId) {
+    return db.query(
+        `DELETE FROM follows WHERE "followerId"=$1 AND "followedId"=$2`,
+        [followerId, followedId]
+    );
+}
+
+
+async function checkFollows(followerId, followedId) {
+    return db.query(
+        `SELECT * FROM follows WHERE "followerId"=$1 AND "followedId"=$2`,
+        [followerId, followedId]
+    );
+}
+
 async function searchUsers(letters){
     const param = letters + '%';
     return db.query(
@@ -53,6 +75,9 @@ const userRepository = {
     createUser,
     checkUsername,
     getPostsByUser,
+    followRequest,
+    unfollow,
+    checkFollows
     searchUsers
 };
 
