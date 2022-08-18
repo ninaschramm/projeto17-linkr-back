@@ -103,12 +103,13 @@ export async function updatePost(req, res){
     if(!checkPost.rowCount){
       return res.sendStatus(404);
     }
-    /*else{
+    else{
+      console.log(`postId: ${postId}, userId: ${userId}`)
       const confirmUser = await postsRepository.confirmUser(postId, userId);
       if(!confirmUser.rowCount){
         return res.sendStatus(401);
       }
-    }*/
+    }
     await postsRepository.updatePost(postId, text);
     return res.sendStatus(200);
   }

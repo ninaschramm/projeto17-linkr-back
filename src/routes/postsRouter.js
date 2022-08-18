@@ -12,6 +12,6 @@ urlsRouter.post("/posts", validateToken, validateSchema(postSchema), createPost)
 urlsRouter.get('/posts', validateToken, getAllPosts);
 urlsRouter.delete('/posts', validateToken, deletePost);
 urlsRouter.get('/user/:id', validateToken, getPostsByUser);
-urlsRouter.put('/edit-post', /*validateToken,*/ updatePost);
+urlsRouter.put('/edit-post', validateToken, updatePost);
 
 export default urlsRouter;
