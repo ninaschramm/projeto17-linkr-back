@@ -5,7 +5,7 @@ import { getLike, postLike, deleteLike } from "../controllers/likeControllers.js
 const likeRouter = Router();
 
 likeRouter.post("/like/:id", validateToken, postLike);
-likeRouter.get("/like/:id", getLike);
+likeRouter.get("/like/:id", validateToken, getLike);
 likeRouter.delete("/like/:id", validateToken, deleteLike);
 
 export default likeRouter;

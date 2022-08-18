@@ -93,3 +93,28 @@ export async function deletePost(req, res) {
     return res.sendStatus(500); // server error
 }
 }
+
+export async function updatePost(req, res){
+  const {postId, text} = req.body;
+  const userId = res.locals.user
+
+  try {
+    const checkPost = await postsRepository.getPost(postId);
+    if(!checkPost.rowCount){
+      return res.sendStatus(404);
+    }
+    else{
+      console.log(`postId: ${postId}, userId: ${userId}`)
+      const confirmUser = await postsRepository.confirmUser(postId, userId);
+      if(!confirmUser.rowCount){
+        return res.sendStatus(401);
+      }
+    }
+    await postsRepository.updatePost(postId, text);
+    return res.sendStatus(200);
+  }
+  catch(e){
+    console.log(e);
+    return res.sendStatus(500);
+  }
+}

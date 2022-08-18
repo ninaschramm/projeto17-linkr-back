@@ -14,13 +14,13 @@ async function addLike(id, userId){
 `, [id, userId]);
 }
 
-async function getLikesNamesByPostId(id){
+async function getLikesNamesByPostId(id, userId){
     return db.query(`
     SELECT users.username 
     FROM users
     JOIN likes ON users.id = likes."userId"
-    WHERE likes."postId" = $1
-`, [id]);
+    WHERE likes."postId" = $1 AND users.id != $2
+`, [id, userId]);
 }
 
 async function getLikesCountByPostId(id){
@@ -33,10 +33,10 @@ async function getLikesByPostIdAndUserId(id, userId){
     return db.query(`
         SELECT * 
         FROM likes 
-        WHERE likes."postId" = $1 AND likes."userId" = $2;
+        WHERE "postId" = $1 AND "userId" = $2;
     `, [id, userId]);
-
 }
+
 const likesRepository = {
     deleteLike,
     addLike,
