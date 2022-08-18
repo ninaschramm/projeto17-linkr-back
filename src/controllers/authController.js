@@ -1,6 +1,9 @@
 import userRepository from "../repositories/userRepository.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import dotenv from 'dotenv';
+
+dotenv.config()
 
 export async function signIn(req, res){
     const {email, password} = req.body;
@@ -19,7 +22,7 @@ export async function signIn(req, res){
             email: emailExist.rows[0].email
         }
         const token = jwt.sign(data, process.env.TOKEN_SECRET, expire);
-        return res.status(200).send({token, picture: emailExist.rows[0].picture});
+        return res.status(200).send({token, picture: emailExist.rows[0].picture, userId: emailExist.rows[0].id});
     }
     catch(e){
         console.log(e);

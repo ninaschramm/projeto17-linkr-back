@@ -54,3 +54,52 @@ export async function getPostsByUser(req, res) {
         return res.sendStatus(500); // server error
       }
     }
+
+export async function followRequest(req, res) {
+  const followerId = res.locals.user
+  const followedId = req.params.id
+
+  try {
+    await userRepository.followRequest(followerId, followedId)
+    return res.sendStatus(200)
+  }
+  catch(err) {
+    console.log(err)
+    return res.sendStatus(500)
+  }
+}
+
+export async function unfollow(req, res) {
+  const followerId = res.locals.user
+  const followedId = req.params.id
+
+  try {
+    await userRepository.unfollow(followerId, followedId)
+    return res.sendStatus(200)
+  }
+  catch(err) {
+    console.log(err)
+    return res.sendStatus(500)
+  }
+}
+
+export async function checkFollows(req, res) {
+  const followerId = res.locals.user
+  const followedId = req.params.id
+
+  console.log(followerId, followedId)
+
+  try {
+    const { rows: follows } = await userRepository.checkFollows(followerId, followedId)
+    if (follows.length === 0) {
+       return res.status(200).send(false)
+    }
+    else {
+      return res.status(200).send(true)
+    }
+  }
+  catch(err) {
+    console.log(err)
+    return res.sendStatus(500)
+  }
+}
