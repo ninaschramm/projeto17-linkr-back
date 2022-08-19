@@ -60,11 +60,12 @@ async function checkFollows(followerId, followedId) {
 }
 
 async function searchUsers(letters){
+    
     const param = letters + '%';
     return db.query(
         `SELECT id, username, picture 
         FROM users 
-        WHERE username LIKE $1`,
+        WHERE username ILIKE $1`,
         [param]
     );
 }
