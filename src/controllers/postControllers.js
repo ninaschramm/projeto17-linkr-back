@@ -41,11 +41,15 @@ try {
 export async function getAllPosts(req, res) {
   
   try {
-    const {rows: posts} = await postsRepository.getAllPosts();
+    let {rows: posts} = await postsRepository.getAllPosts();
     if(posts.length === 0) {
       return res.sendStatus(404); // not found
     }
-  
+    const {rows: reposts} = await postsRepository.getAllRePosts();
+    if(reposts.length > 0) {
+      posts = [...posts, ...reposts]
+      posts.sort((a,b) =>  new Date(b.createdAt) - new Date(a.createdAt));
+    }
     const result = await Promise.all(posts.map(async (post)=> {
       
       const newPost = await urlMetadata(post.link).then(
@@ -111,6 +115,24 @@ export async function updatePost(req, res){
       }
     }
     await postsRepository.updatePost(postId, text);
+    return res.sendStatus(200);
+  }
+  catch(e){
+    console.log(e);
+    return res.sendStatus(500);
+  }
+}
+
+export async function createRepost(req, res){
+  const {postId} = req.body;
+  const userId = res.locals.user
+
+  try {
+    const checkPost = await postsRepository.getPost(postId);
+    if(!checkPost.rowCount){
+      return res.sendStatus(404);
+    }
+    await postsRepository.createRePost(userId, postId);
     return res.sendStatus(200);
   }
   catch(e){

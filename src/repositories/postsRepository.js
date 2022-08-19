@@ -13,8 +13,8 @@ async function createPost(link, text, id) {
 async function getAllPosts() {
   return db.query(`
     SELECT posts.id as id, posts."userId", users.username, users.picture as "userPicture", 
-    posts.text, posts.link,
-    COALESCE(COUNT(likes.id),0) AS "likes"
+    posts.text, posts.link, false as "reposter",
+    COALESCE(COUNT(likes.id),0) AS "likes", posts."createdAt"
     FROM posts
     JOIN users ON posts."userId" = users.id
     LEFT JOIN likes ON likes."postId" = posts.id
@@ -25,11 +25,35 @@ async function getAllPosts() {
     );
 }
 
+async function getAllRePosts() {
+  return db.query(`
+  SELECT posts.id as id, posts."userId", users.username, users.picture as "userPicture", 
+  posts.text, posts.link,
+  COALESCE(COUNT(likes.id),0) AS "likes", reposts."createdAt" as "createdAt", reposts."userId" as "reposter", u.username as "reposterName"
+  FROM posts
+  JOIN users ON posts."userId" = users.id
+  JOIN reposts ON reposts."postId" = posts.id
+  LEFT JOIN likes ON likes."postId" = posts.id
+  JOIN users u ON reposts."userId" = u.id
+  GROUP BY posts.id, users.id, reposts.id, u.username
+  ORDER BY posts."createdAt" DESC  
+  LIMIT 20
+    `
+    );
+}
+
 async function getPost(id) {
   return db.query(`
   SELECT * FROM posts 
   WHERE posts.id=$1
   `, [id])
+}
+
+async function createRePost(userId, postId) {
+  return db.query(`
+    INSERT INTO reposts("userId", "postId")
+    VALUES ($1, $2)
+  `, [userId, postId])
 }
 
 async function confirmUser(postId, userId) {
@@ -81,7 +105,9 @@ const postsRepository = {
     insertHashtag,
     insertHashtagPost,
     confirmUser,
-    updatePost   
+    updatePost,
+    createRePost,
+    getAllRePosts   
   };
   
   export default postsRepository;
