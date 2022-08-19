@@ -10,18 +10,27 @@ async function createPost(link, text, id) {
   
 }
 
-async function getAllPosts() {
+async function checkIfFollows(id) {
+  return db.query(`
+  SELECT * FROM follows
+  WHERE "followerId" = $1
+`, [id])
+}
+
+async function getAllPosts(id) {
   return db.query(`
     SELECT posts.id as id, posts."userId", users.username, users.picture as "userPicture", 
     posts.text, posts.link, false as "reposter",
     COALESCE(COUNT(likes.id),0) AS "likes", posts."createdAt"
     FROM posts
     JOIN users ON posts."userId" = users.id
+    JOIN follows ON follows."followedId" = posts."userId"
     LEFT JOIN likes ON likes."postId" = posts.id
+    WHERE follows."followerId" = $1
     GROUP BY posts.id, users.id
     ORDER BY posts.id DESC
     LIMIT 20
-    `
+    `, [id]
     );
 }
 
@@ -107,7 +116,8 @@ const postsRepository = {
     confirmUser,
     updatePost,
     createRePost,
-    getAllRePosts   
+    getAllRePosts,
+    checkIfFollows
   };
   
   export default postsRepository;

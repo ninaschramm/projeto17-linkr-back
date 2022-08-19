@@ -38,12 +38,13 @@ try {
   }
 }
 
+
 export async function getAllPosts(req, res) {
-  
+  const id = res.locals.user;  
   try {
-    let {rows: posts} = await postsRepository.getAllPosts();
+    let {rows: posts} = await postsRepository.getAllPosts(id);
     if(posts.length === 0) {
-      return res.sendStatus(404); // not found
+      return res.sendStatus(206); // not found
     }
     const {rows: reposts} = await postsRepository.getAllRePosts();
     if(reposts.length > 0) {
